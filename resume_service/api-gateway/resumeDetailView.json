@@ -1,0 +1,121 @@
+{
+  "paths": {
+    "/resumeDetailView": {
+      "post": {
+        "summary": "Get detailed info for a specific resume by emailID and version",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResumeDetailViewRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Detailed resume information retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResumeDetailViewResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - invalid input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                },
+                "example": {
+                  "message": "Missing required field: version"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resume not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                },
+                "example": {
+                  "message": "Resume not found for user 'abc@gmail.com' with version 'V2'"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                },
+                "example": {
+                  "message": "Unexpected error occurred while fetching resume details."
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ResumeDetailViewRequest": {
+        "type": "object",
+        "required": ["userName", "version"],
+        "properties": {
+          "userName": {
+            "type": "string",
+            "example": "abc@gmail.com"
+          },
+          "version": {
+            "type": "string",
+            "example": "V2"
+          }
+        }
+      },
+      "ResumeDetailViewResponse": {
+        "type": "object",
+        "properties": {
+          "fileName": {
+            "type": "string",
+            "example": "resume.pdf"
+          },
+          "version": {
+            "type": "string",
+            "example": "V7"
+          },
+          "downloadUrl": {
+            "type": "string",
+            "format": "uri",
+            "example": "https://resumeupload/resume.pdf"
+          },
+          "uploadedAt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2025-09-05T12:34:56Z"
+          }
+        }
+      },
+      "ErrorMessage": {
+        "type": "object",
+        "required": ["message"],
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Description of the error"
+          }
+        }
+      }
+    }
+  }
+}

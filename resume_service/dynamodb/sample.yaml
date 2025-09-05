@@ -1,0 +1,19 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: DynamoDB table to store resume details with versioning
+
+Resources:
+  ResumeTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: ResumeTable
+      AttributeDefinitions:
+        - AttributeName: userName
+          AttributeType: S
+        - AttributeName: version
+          AttributeType: S  # or use 'N' if version is a number
+      KeySchema:
+        - AttributeName: userName
+          KeyType: HASH   # Partition key
+        - AttributeName: version
+          KeyType: RANGE  # Sort key
+      BillingMode: PAY_PER_REQUEST

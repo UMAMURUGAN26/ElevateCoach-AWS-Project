@@ -1,0 +1,126 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "ResumeUpload",
+    "version": "2025-09-05T00:00:00Z"
+  },
+  "servers": [
+    {
+      "url": "https://execute-api.us-east-1.amazonaws.com/Dev/resumeUpload",
+      "variables": {
+        "basePath": {
+          "default": "Dev"
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/resumeUpload": {
+      "post": {
+        "summary": "Upload or update a resume",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResumeUploadRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Resume uploaded successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResumeUploadResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - invalid input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                },
+                "example": {
+                  "message": "Missing required field: fileContent"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                },
+                "example": {
+                  "message": "Unexpected error occurred while processing the resume upload."
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ResumeUploadRequest": {
+        "type": "object",
+        "required": ["userName", "fileName", "fileContent"],
+        "properties": {
+          "userName": {
+            "type": "string",
+            "example": "abc@gmail.com"
+          },
+          "fileName": {
+            "type": "string",
+            "example": "resume.pdf"
+          },
+          "fileContent": {
+            "type": "string",
+            "description": "Resume in base64 format"
+          }
+        }
+      },
+      "ResumeUploadResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "resume.pdf uploaded successfully."
+          },
+          "fileName": {
+            "type": "string",
+            "example": "resume.pdf"
+          },
+          "version": {
+            "type": "string",
+            "example": "V7"
+          },
+          "s3Url": {
+            "type": "string",
+            "format": "uri",
+            "example": "https://resumeupload/resume.pdf"
+          }
+        }
+      },
+      "ErrorMessage": {
+        "type": "object",
+        "required": ["message"],
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Error message describing what went wrong"
+          }
+        }
+      }
+    }
+  }
+}
